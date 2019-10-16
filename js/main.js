@@ -14,11 +14,15 @@ var COMMENTS = [
   'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!'
 ];
 var NAMES = ['Денис', 'Алла', 'Евгений', 'Вера', 'Роман', 'Сергей'];
-var LIKES_MIN_NUMBER = 15;
-var LIKES_MAX_NUMBER = 200;
+var likes = {
+  MIN: 15,
+  MAX: 200
+};
 var PICTURE_NUMBER = 25;
-var AVATAR_MIN_NUMBER = 1;
-var AVATAR_MAX_NUMBER = 6;
+var avatar = {
+  MIN: 1,
+  MAX: 6
+};
 
 var randomInt = function (min, max) {
   return Math.floor(Math.random() * (max - min) + min);
@@ -30,7 +34,7 @@ var getRandomData = function () {
     randomPicture.push({
       url: 'photos/' + i + '.jpg',
       description: 'Описание фото',
-      likes: randomInt(LIKES_MIN_NUMBER, LIKES_MAX_NUMBER),
+      likes: randomInt(likes.MIN, likes.MAX),
       comments: getRandomComment(randomInt(0, 5))
     });
   }
@@ -41,7 +45,7 @@ var getRandomComment = function (countOfComments) {
   var comments = [];
   for (var i = 0; i < countOfComments; i++) {
     comments.push({
-      avatar: 'img/avatar-' + randomInt(AVATAR_MIN_NUMBER, AVATAR_MAX_NUMBER) + '.svg',
+      avatar: 'img/avatar-' + randomInt(avatar.MIN, avatar.MAX) + '.svg',
       message: getRandomMassage(),
       name: NAMES[randomInt(0, NAMES.length)]
     });
@@ -57,8 +61,6 @@ var getRandomMassage = function () {
   return massage;
 };
 
-var pictures = getRandomData(PICTURE_NUMBER);
-
 var renderPicture = function (picture) {
   var pictureElement = similarPictureTemplate.cloneNode(true);
   pictureElement.querySelector('img').src = picture.url;
@@ -67,9 +69,13 @@ var renderPicture = function (picture) {
   return pictureElement;
 };
 
-var fragment = document.createDocumentFragment();
-for (var i = 0; i < pictures.length; i++) {
-  fragment.appendChild(renderPicture(pictures[i]));
-}
-similarListElement.appendChild(fragment);
+var createFragment = function () {
+  var pictures = getRandomData(PICTURE_NUMBER);
+  var fragment = document.createDocumentFragment();
+  for (var i = 0; i < pictures.length; i++) {
+    fragment.appendChild(renderPicture(pictures[i]));
+  }
+  similarListElement.appendChild(fragment);
+};
+createFragment();
 
