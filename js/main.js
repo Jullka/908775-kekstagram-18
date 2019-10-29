@@ -140,7 +140,7 @@ scaleControlSmaller.addEventListener('click', function () {
 // Эффекты
 var effects = {
   none: {
-    class: 'effects__preview--none'
+    class: 'effects__preview--none',
   },
   chrome: {
     class: 'effects__preview--chrome',
@@ -158,7 +158,7 @@ var effects = {
   },
   marvin: {
     class: 'effects__preview--marvin',
-    effectName: 'grinvert',
+    effectName: 'invert',
     min: 0,
     max: 100,
     points: '%'
@@ -183,34 +183,16 @@ var effectsList = document.querySelector('.effects');
 
 effectsList.addEventListener('change', function (evt) {
   var currentEffect = effects[evt.target.value];
-  imgUploadPreview.querySelector('img').style.filter = currentEffect.effectName + '(' + currentEffect.max + currentEffect.points + ')';
+  var previewPicture = imgUploadPreview.querySelector('img');
+  previewPicture .style.filter = currentEffect.effectName + '(' + currentEffect.max + currentEffect.points + ')';
   imgUploadPreview.classList = 'img-upload__preview';
-  // imgUploadPreview.classList.add(currentEffect.class);
-  console.log(evt.target.value);
+  previewPicture.classList.add(currentEffect.class);
 });
-
-var getEffectLevel = function() {
-
-};
-
-// // Слайдер
-// var pinMaxValue = 453;
-// var effectLevelPin = document.querySelector('.effect-level__pin');
-// var effectLevelDepth = document.querySelector('.effect-level__depth');
-// var effectLevel = document.querySelector('.img-upload__effect-level');
-// var effectLevelValue = document.querySelector('.effect-level__value');
-
-// effectLevelPin.addEventListener('mouseup', function ()) {
-
-// };
-
-
 
 // Хештеги
 var MAX_HASHTAGS = 5;
 var MAX_HASHTAG_LENGTH = 20;
 var textHashtags = document.querySelector('.text__hashtags');
-var submitButton = document.querySelector('.img-upload__submit');
 
 var checkHashtags = function (userInput) {
   if (userInput === '') {
@@ -267,7 +249,6 @@ textHashtags.addEventListener('blur', function () {
 });
 
 // Комментарии
-
 var textDescription = document.querySelector('.text__description');
 textDescription.addEventListener('focus', function () {
   document.removeEventListener('keydown', onEscPress);
