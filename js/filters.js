@@ -52,4 +52,39 @@
     previewPicture.classList.add(currentEffect.class);
   });
 
+  var effectLevelPin = document.querySelector('.effect-level__pin');
+
+  effectLevelPin.addEventListener('mousedown', function (evt) {
+    evt.preventDefault();
+
+    var startCoordsX = evt.clientX;
+
+    var onMouseMove = function (moveEvt) {
+      moveEvt.preventDefault();
+
+      var shiftX = startCoordsX - moveEvt.clientX;
+      var position = effectLevelPin.offsetLeft - shiftX;
+      startCoordsX = moveEvt.clientX;
+
+      if (position <= 0) {
+        position = 0;
+      }
+
+      if (position >= 453) {
+        position = 453;
+      }
+
+      effectLevelPin.style.left = position + 'px';
+    };
+
+    var onMouseUp = function (upEvt) {
+      upEvt.preventDefault();
+
+      document.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mouseup', onMouseUp);
+    };
+
+    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mouseup', onMouseUp);
+  });
 })();
