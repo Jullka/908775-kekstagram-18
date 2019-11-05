@@ -46,22 +46,32 @@
 
   effectsList.addEventListener('change', function (evt) {
     var currentEffect = effects[evt.target.value];
-    var previewPicture = window.imgUploadPreview.querySelector('img');
-    previewPicture .style.filter = currentEffect.effectName + '(' + currentEffect.max + currentEffect.points + ')';
-    window.imgUploadPreview.classList = 'img-upload__preview';
-    previewPicture.classList.add(currentEffect.class);
+    effectFill(currentEffect, 1);
   });
+
+  var effectFill = function (effect, value) {
+    var previewPicture = window.imgUploadPreview.querySelector('img');
+    var satiety = (effect.max - effect.min) * value + effect.min;
+    previewPicture.style.filter = effect.effectName + '(' + satiety + effect.points + ')';
+    window.imgUploadPreview.classList = 'img-upload__preview';
+    previewPicture.classList.add(effect.class);
+  };
+
+  var getSliderValue = function (currentValue, maxValue) {
+    var onePercentSize = maxValue / 100;
+    return Math.round(currentValue / onePercentSize);
+  };
 
   var effectLevelPin = document.querySelector('.effect-level__pin');
 
   effectLevelPin.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
-
+    console.log('test');
     var startCoordsX = evt.clientX;
 
     var onMouseMove = function (moveEvt) {
       moveEvt.preventDefault();
-
+      console.log('test');
       var shiftX = startCoordsX - moveEvt.clientX;
       var position = effectLevelPin.offsetLeft - shiftX;
       startCoordsX = moveEvt.clientX;
@@ -75,11 +85,14 @@
       }
 
       effectLevelPin.style.left = position + 'px';
+      var sliderValue = getSliderValue(position, 453);
+      var currentEffect = effects[evt.target.value];
+      effectFill(currentEffect, sliderValue);
     };
 
     var onMouseUp = function (upEvt) {
       upEvt.preventDefault();
-
+      console.log('test');
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', onMouseUp);
     };
