@@ -17,6 +17,7 @@
   var openOverlay = function () {
     uploadOverlay.classList.remove('hidden');
     document.addEventListener('keydown', onEscPress);
+    window.resetFilter();
   };
 
   uploadFile.addEventListener('change', openOverlay);
