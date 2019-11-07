@@ -42,14 +42,86 @@
     }
   };
 
+  var PIN_MAX_POSITION = 453;
+  var PIN_MIN_POSITION = 0;
+  var startX = PIN_MIN_POSITION;
+  var selectedEffect = effects.none;
+
   var effectsList = document.querySelector('.effects');
+  var effectLevelPin = document.querySelector('.effect-level__pin');
+  var effectLevelDepth = document.querySelector('.effect-level__depth');
+  var imageUploadEffectLevel = document.querySelector('.img-upload__effect-level');
+
+  window.resetFilter = function () {
+    effectLevelPin.style.left = 0; // !!!
+    effectLevelDepth.style.width = 0;
+    window.imgUploadPreview.style.filter = '';
+  };
+
+  var filterHandler = function () {
+    if (selectedEffect === 'effects.none') { // !!!
+      imageUploadEffectLevel.classList.add('hidden');
+    } else {
+      imageUploadEffectLevel.classList.remove('hidden');
+    }
+
+  };
+
+  var effectFill = function (effect, value) {
+    var previewPicture = window.imgUploadPreview.querySelector('img');
+    var satiety = (effect.max - effect.min) * value + effect.min;
+    previewPicture.style.filter = effect.effectName + '(' + satiety + effect.points + ')';
+    window.imgUploadPreview.classList = 'img-upload__preview';
+    previewPicture.classList.add(effect.class);
+  };
+
+  var getSliderValue = function (currentValue, maxValue) {
+    var onePercentSize = maxValue / 100;
+    return Math.round(currentValue / onePercentSize) / 100;
+  };
+
+  var onMouseMove = function (moveEvt) {
+    moveEvt.preventDefault();
+
+    var shiftX = startX - moveEvt.clientX;
+    startX = moveEvt.clientX;
+
+    var position = effectLevelPin.offsetLeft - shiftX;
+
+    if (position < PIN_MIN_POSITION || position > PIN_MAX_POSITION) {
+      return;
+    } else {
+      effectLevelPin.style.left = position + 'px';
+    }
+
+    effectLevelPin.style.left = position + 'px';
+    effectLevelDepth.style.width = effectLevelPin.style.left;
+    var sliderValue = getSliderValue(position, PIN_MAX_POSITION);
+    effectFill(selectedEffect, sliderValue);
+  };
+
+  var onMouseUp = function (upEvt) {
+    upEvt.preventDefault();
+
+    document.removeEventListener('mousemove', onMouseMove);
+    document.removeEventListener('mouseup', onMouseUp);
+  };
+
+  effectLevelPin.addEventListener('mousedown', function (evt) {
+    evt.preventDefault();
+
+    startX = evt.clientX;
+
+    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mouseup', onMouseUp);
+  });
 
   effectsList.addEventListener('change', function (evt) {
     var currentEffect = effects[evt.target.value];
-    var previewPicture = window.imgUploadPreview.querySelector('img');
-    previewPicture .style.filter = currentEffect.effectName + '(' + currentEffect.max + currentEffect.points + ')';
-    window.imgUploadPreview.classList = 'img-upload__preview';
-    previewPicture.classList.add(currentEffect.class);
+    selectedEffect = currentEffect;
+    effectFill(currentEffect, 1);
+    filterHandler();
+    window.resetFilter();
   });
 
 })();
