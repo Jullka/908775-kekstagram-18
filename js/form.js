@@ -2,6 +2,7 @@
 
 (function () {
   var ESC_KEYCODE = 27;
+  window.ESC_KEYCODE = ESC_KEYCODE;
   var uploadFile = document.querySelector('.img-upload__input');
   var uploadOverlay = document.querySelector('.img-upload__overlay');
   var uploadClosed = document.querySelector('.img-upload__cancel');
@@ -17,6 +18,7 @@
   var openOverlay = function () {
     uploadOverlay.classList.remove('hidden');
     document.addEventListener('keydown', onEscPress);
+    window.resetFilter();
   };
 
   uploadFile.addEventListener('change', openOverlay);
