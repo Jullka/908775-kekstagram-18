@@ -2,7 +2,6 @@
 
 (function () {
   var ESC_KEYCODE = 27;
-  window.ESC_KEYCODE = ESC_KEYCODE;
   var uploadFile = document.querySelector('.img-upload__input');
   var uploadOverlay = document.querySelector('.img-upload__overlay');
   var uploadClosed = document.querySelector('.img-upload__cancel');
@@ -96,4 +95,7 @@
   textDescription.addEventListener('focus', function () {
     document.removeEventListener('keydown', onEscPress);
   });
+
+  window.ESC_KEYCODE = ESC_KEYCODE;
+
 })();

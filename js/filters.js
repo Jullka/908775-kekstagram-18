@@ -81,6 +81,7 @@
     } else {
       effectLevelPin.style.left = position + 'px';
     }
+
     effectLevelPin.style.left = position + 'px';
     effectLevelDepth.style.width = effectLevelPin.style.left;
     var sliderValue = getSliderValue(position, PIN_MAX_POSITION);
