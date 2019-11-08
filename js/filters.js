@@ -1,5 +1,4 @@
 'use strict';
-
 (function () {
   var effects = {
     none: {
@@ -46,25 +45,15 @@
   var PIN_MIN_POSITION = 0;
   var startX = PIN_MIN_POSITION;
   var selectedEffect = effects.none;
-
   var effectsList = document.querySelector('.effects');
   var effectLevelPin = document.querySelector('.effect-level__pin');
   var effectLevelDepth = document.querySelector('.effect-level__depth');
   var imageUploadEffectLevel = document.querySelector('.img-upload__effect-level');
 
   window.resetFilter = function () {
-    effectLevelPin.style.left = 0; // !!!
+    effectLevelPin.style.left = PIN_MAX_POSITION + 'px';
     effectLevelDepth.style.width = 0;
     window.imgUploadPreview.style.filter = '';
-  };
-
-  var filterHandler = function () {
-    if (selectedEffect === 'effects.none') { // !!!
-      imageUploadEffectLevel.classList.add('hidden');
-    } else {
-      imageUploadEffectLevel.classList.remove('hidden');
-    }
-
   };
 
   var effectFill = function (effect, value) {
@@ -85,7 +74,6 @@
 
     var shiftX = startX - moveEvt.clientX;
     startX = moveEvt.clientX;
-
     var position = effectLevelPin.offsetLeft - shiftX;
 
     if (position < PIN_MIN_POSITION || position > PIN_MAX_POSITION) {
@@ -102,14 +90,12 @@
 
   var onMouseUp = function (upEvt) {
     upEvt.preventDefault();
-
     document.removeEventListener('mousemove', onMouseMove);
     document.removeEventListener('mouseup', onMouseUp);
   };
 
   effectLevelPin.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
-
     startX = evt.clientX;
 
     document.addEventListener('mousemove', onMouseMove);
@@ -119,9 +105,16 @@
   effectsList.addEventListener('change', function (evt) {
     var currentEffect = effects[evt.target.value];
     selectedEffect = currentEffect;
+
+    if (evt.target.value === 'none') {
+      imageUploadEffectLevel.classList.add('hidden');
+    } else {
+      imageUploadEffectLevel.classList.remove('hidden');
+    }
+
     effectFill(currentEffect, 1);
-    filterHandler();
     window.resetFilter();
+
   });
 
 })();

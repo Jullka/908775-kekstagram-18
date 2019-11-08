@@ -95,4 +95,7 @@
   textDescription.addEventListener('focus', function () {
     document.removeEventListener('keydown', onEscPress);
   });
+
+  window.ESC_KEYCODE = ESC_KEYCODE;
+
 })();
