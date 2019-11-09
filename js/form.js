@@ -7,7 +7,7 @@
 
   // Закрытие нажатием ESC
   var onEscPress = function (evt) {
-    if (evt.keyCode === window.util.ESC_KEYCODE) {
+    if (evt.keyCode === window.KEYCODE.ESC) {
       closeOverlay();
     }
   };
