@@ -9,61 +9,52 @@
   var errorTemplate = document.querySelector('#error')
     .content
     .querySelector('.error');
+
   var fragment = document.createDocumentFragment();
   var main = document.querySelector('main');
+  var bigPictureElement = document.querySelector('.big-picture');
+  bigPictureElement.classList.remove('hidden');
+  var commentCountElement = bigPictureElement.querySelector('.social__comment-count');
+  var commentsLoader = bigPictureElement.querySelector('.comments-loader');
 
   var renderPicture = function (picture) {
     var pictureElement = pictureTemplate.cloneNode(true);
-    pictureElement.querySelector('img').src = picture.url;
+    pictureElement.querySelector('.picture__img').src = picture.url;
     pictureElement.querySelector('.picture__likes').textContent = picture.likes;
     pictureElement.querySelector('.picture__comments').textContent = picture.comments.length;
+
     return pictureElement;
   };
 
-  var createFragment = function (pictures) {
-    pictures.forEach(function (pictureElement) {
-      fragment.appendChild(renderPicture(pictureElement));
-    });
-    similarListElement.appendChild(fragment);
-  };
-
-  var bigPicture = document.querySelector('.big-picture');
-  bigPicture.classList.remove('hidden');
-  var commentsList = document.querySelector('.social__comments');
-  var commentElement = document.querySelectorAll('.social__comment');
-  var commentCountElement = document.querySelector('.social__comment-count');
-  var commentsLoader = document.querySelector('.comments-loader');
-
   var renderBigPicture = function (picture) {
-    var bigPictureCommentsCount = picture.comments.length;
-    bigPicture.querySelector('big-picture__img').querySelector('img').src = picture.url;
-    bigPicture.querySelector('.likes-count').textContent = picture.likes;
-    bigPicture.querySelector('.comments-count').textContent = bigPictureCommentsCount;
-    bigPicture.querySelector('.social__caption').textContent = picture.description;
-
-
-    for (var i = 0; i < commentElement.length; i++) {
-      commentsList.removeChild(commentsList[i]);
+    bigPictureElement.querySelector('.big-picture__img img').src = picture.url;
+    bigPictureElement.querySelector('.likes-count').textContent = picture.likes;
+    bigPictureElement.querySelector('.social__caption').alt = picture.description;
+    bigPictureElement.querySelector('.comments-count').textContent = picture.comments.length;
+    var commentElements = bigPictureElement.querySelectorAll('.social__comment');
+    for (var i = 0; i < commentElements.length; i++) {
+      if (picture.comments[i]) {
+        commentElements[i].querySelector('.social__picture').src = picture.comments[i].avatar;
+        commentElements[i].querySelector('.social__picture').alt = picture.comments[i].name;
+        commentElements[i].querySelector('.social__text').textContent = picture.comments[i].message;
+      }
     }
-
-    var socialElementFragment = document.createDocumentFragment();
-
-    for (var j = 0; j < bigPictureCommentsCount; j++) {
-      var comment = commentElement.cloneNode(true);
-      comment.querySelector('img').src = picture.comments[j].avatar;
-      comment.querySelector('img').alt = picture.comments[j].name;
-      comment.querySelector('.social__text').textContent = picture.comments[j].message;
-
-      socialElementFragment.appendChild(comment);
-    }
-
-    commentElement.appendChild(socialElementFragment);
 
     commentsLoader.classList.add('visually-hidden');
     commentCountElement.classList.add('visually-hidden');
   };
-  var elements = renderPicture();
-  renderBigPicture(elements[0]);
+
+  var onSuccess = function (pictures) {
+    for (var i = 0; i < pictures.length; i++) {
+      fragment.appendChild(renderPicture(pictures[i]));
+    }
+    similarListElement.appendChild(fragment);
+    renderBigPicture(pictures[0]);
+
+    if (document.querySelector('.error')) {
+      document.querySelector('.error').remove();
+    }
+  };
 
   var onError = function (errorText) {
     var errorElement = errorTemplate.cloneNode(true);
@@ -71,6 +62,6 @@
     main.appendChild(errorElement);
   };
 
-  window.load(createFragment, onError);
+  window.load(onSuccess, onError);
 
 })();
