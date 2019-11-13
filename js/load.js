@@ -49,6 +49,8 @@
 
   window.load = {
     load: load,
-    send: send
+    send: send,
   };
+
+  window.URL.post = URL.post;
 })();

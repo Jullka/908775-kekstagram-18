@@ -10,6 +10,7 @@
   var errorElement = document.querySelector('.error');
   var errorButton = document.querySelectorAll('.error__button');
   var errorInner = document.querySelector('.error__inner');
+  var imgUploadForm = document.querySelector('.img-upload__form');
 
   // Закрытие нажатием ESC
   var onEscCloseOverlay = function (evt) {
@@ -152,6 +153,12 @@
   uploadOverlay.addEventListener('submit', function (evt) {
     evt.preventDefault();
     window.load.saveData(new FormData(uploadOverlay), window.onSuccess, window.onError);
+    window.load.send();
+  });
+
+  imgUploadForm.addEventListener('submit', function (evt) {
+    window.load.send(window.URL.post, closeSuccessLoad, closeErrorLoad, imgUploadForm);
+    evt.preventDefault();
   });
 
 })();
