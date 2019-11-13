@@ -52,7 +52,7 @@
 
   window.resetFilter = function () {
     effectLevelPin.style.left = PIN_MAX_POSITION + 'px';
-    effectLevelDepth.style.width = 0;
+    effectLevelDepth.style.width = PIN_MAX_POSITION + 'px';
     window.imgUploadPreview.style.filter = '';
   };
 
@@ -82,7 +82,7 @@
       effectLevelPin.style.left = position + 'px';
     }
 
-    effectLevelPin.style.left = position + 'px';
+    // effectLevelPin.style.left = position + 'px';
     effectLevelDepth.style.width = effectLevelPin.style.left;
     var sliderValue = getSliderValue(position, PIN_MAX_POSITION);
     effectFill(selectedEffect, sliderValue);
@@ -106,15 +106,19 @@
     var currentEffect = effects[evt.target.value];
     selectedEffect = currentEffect;
 
-    if (evt.target.value === 'none') {
-      imageUploadEffectLevel.classList.add('hidden');
-    } else {
-      imageUploadEffectLevel.classList.remove('hidden');
-    }
+    // if (evt.target.value === 'none') {
+    //   imageUploadEffectLevel.classList.add('hidden');
+    // } else {
+    //   imageUploadEffectLevel.classList.remove('hidden');
+    // }
+
+    imageUploadEffectLevel.classList.remove('hidden');
 
     effectFill(currentEffect, 1);
     window.resetFilter();
 
   });
+
+  window.imageUploadEffectLevel = imageUploadEffectLevel;
 
 })();
