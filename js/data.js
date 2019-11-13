@@ -45,13 +45,13 @@
       }
     }
 
-    document.addEventListener('keydown', onEscPress);
+    document.addEventListener('keydown', onEscPressCloseBigPiture);
     commentsLoader.classList.add('visually-hidden');
     commentCountElement.classList.add('visually-hidden');
     bigPictureElement.classList.remove('hidden');
   };
 
-  var onEscPress = function (evt) {
+  var onEscPressCloseBigPiture = function (evt) {
     if (evt.keyCode === window.KEYCODE.ESC) {
       closeBigPicture();
     }
@@ -60,7 +60,7 @@
   var closeBigPicture = function () {
     bigPictureElement.classList.add('hidden');
 
-    document.removeEventListener('keydown', onEscPress);
+    document.removeEventListener('keydown', onEscPressCloseBigPiture);
   };
 
   bigPictureCancel.addEventListener('click', function () {
@@ -84,6 +84,9 @@
     main.appendChild(errorElement);
   };
 
-  window.load(onSuccess, onError);
+  window.load.load(onSuccess, onError);
+
+  window.onSuccess = onSuccess;
+  window.onError = onError;
 
 })();

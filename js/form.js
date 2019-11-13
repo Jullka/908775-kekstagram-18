@@ -1,12 +1,19 @@
 'use strict';
 
 (function () {
+
   var uploadFile = document.querySelector('.img-upload__input');
   var uploadOverlay = document.querySelector('.img-upload__overlay');
   var uploadClosed = document.querySelector('.img-upload__cancel');
+  var successElement = document.querySelector('.success');
+  var successButton = document.querySelector('.success__button');
+  var errorElement = document.querySelector('.error');
+  var errorButton = document.querySelectorAll('.error__button');
+  var errorInner = document.querySelector('.error__inner');
+  var imgUploadForm = document.querySelector('.img-upload__form');
 
   // Закрытие нажатием ESC
-  var onEscPress = function (evt) {
+  var onEscCloseOverlay = function (evt) {
     if (evt.keyCode === window.KEYCODE.ESC) {
       closeOverlay();
     }
@@ -14,8 +21,9 @@
 
   // Открытие формы для редактирования фото
   var openOverlay = function () {
+    window.imageUploadEffectLevel.classList.add('hidden');
     uploadOverlay.classList.remove('hidden');
-    document.addEventListener('keydown', onEscPress);
+    document.addEventListener('keydown', onEscCloseOverlay);
     window.resetFilter();
   };
 
@@ -24,7 +32,8 @@
   // Закрытие формы для редактирования фото
   var closeOverlay = function () {
     uploadOverlay.classList.add('hidden');
-    document.removeEventListener('keydown', onEscPress);
+    document.removeEventListener('keydown', onEscCloseOverlay);
+    uploadFile.value = '';
   };
 
   uploadClosed.addEventListener('click', function () {
@@ -81,18 +90,75 @@
   });
 
   textHashtags.addEventListener('focus', function () {
-    document.removeEventListener('keydown', onEscPress);
+    document.removeEventListener('keydown', onEscCloseOverlay);
   });
 
   textHashtags.addEventListener('blur', function () {
-    document.addEventListener('keydown', onEscPress);
+    document.addEventListener('keydown', onEscCloseOverlay);
     checkHashtags(textHashtags);
   });
 
   // Комментарии
   var textDescription = document.querySelector('.text__description');
   textDescription.addEventListener('focus', function () {
-    document.removeEventListener('keydown', onEscPress);
+    document.removeEventListener('keydown', onEscCloseOverlay);
+  });
+
+  var closeSuccessLoad = function () {
+    window.render.mainBlock.removeChild(successElement);
+
+    document.removeEventListener('keydown', onEscCloseSuccessLoad);
+    successButton.removeEventListener('click', closeSuccessLoad);
+    document.removeEventListener('click', onClickCloseSuccessLoad);
+
+    uploadOverlay.reset();
+  };
+
+  var onEscCloseSuccessLoad = function (evt) {
+    if (evt.keyCode === window.KEYCODE.ESC) {
+      closeSuccessLoad();
+    }
+  };
+
+  var onClickCloseSuccessLoad = function (evt) {
+    var successInner = document.querySelector('.success__inner');
+    if (evt.target !== successInner && !(successInner.contains(evt.target))) {
+      closeSuccessLoad();
+    }
+  };
+
+  var closeErrorLoad = function () {
+    window.main.removeChild(errorElement);
+
+    for (var i = 0; i < errorButton.length; i++) {
+      errorButton[i].removeEventListener('click', closeErrorLoad);
+    }
+    document.removeEventListener('keydown', onEscCloseErrorLoad, true);
+    document.removeEventListener('click', onClickCloseErrorLoad);
+
+  };
+
+  var onEscCloseErrorLoad = function (evt) {
+    if (evt.keyCode === window.KEYCODE.ESC) {
+      closeErrorLoad();
+    }
+  };
+
+  var onClickCloseErrorLoad = function (evt) {
+    if (evt.target !== errorInner && !(errorInner.contains(evt.target))) {
+      closeErrorLoad();
+    }
+  };
+
+  uploadOverlay.addEventListener('submit', function (evt) {
+    evt.preventDefault();
+    window.load.saveData(new FormData(uploadOverlay), window.onSuccess, window.onError);
+    window.load.send();
+  });
+
+  imgUploadForm.addEventListener('submit', function (evt) {
+    window.load.send(window.URL.post, closeSuccessLoad, closeErrorLoad, imgUploadForm);
+    evt.preventDefault();
   });
 
 })();

@@ -6,7 +6,6 @@
   var scaleControlValue = document.querySelector('.scale__control--value');
   var scaleControlNumber = parseInt(scaleControlValue.value, 10);
   var imgUploadPreview = document.querySelector('.img-upload__preview');
-  window.imgUploadPreview = imgUploadPreview;
 
   var ScaleValue = {
     MIN: 25,
@@ -29,5 +28,7 @@
       imgUploadPreview.querySelector('img').style.transform = 'scale(' + (scaleControlNumber / 100) + ')';
     }
   });
+
+  window.imgUploadPreview = imgUploadPreview;
 
 })();
