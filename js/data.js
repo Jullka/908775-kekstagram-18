@@ -13,14 +13,18 @@
   var fragment = document.createDocumentFragment();
   var main = document.querySelector('main');
   var bigPictureElement = document.querySelector('.big-picture');
-  var commentCountElement = bigPictureElement.querySelector('.social__comment-count');
+  // var commentCountElement = bigPictureElement.querySelector('.social__comment-count');
   var commentsLoader = bigPictureElement.querySelector('.comments-loader');
-  var bigPictureCancel = bigPictureElement.querySelector('.big-picture__cancel');
+  // var bigPictureCancel = bigPictureElement.querySelector('.big-picture__cancel');
   var filters = document.querySelector('.img-filters');
   var popularFilter = document.querySelector('#filter-popular');
   var randomFilter = document.querySelector('#filter-random');
   var discussedFilter = document.querySelector('#filter-discussed');
+  var commentElementList = document.querySelector('.social__comments');
+  var socialPicture = document.querySelector('.social__picture');
+  var socialText = document.querySelector('.social__text');
   var FHOTO_NUMBER = 10;
+  var COMMENT_NUMBER = 5;
 
   var renderPicture = function (picture) {
     var pictureElement = pictureTemplate.cloneNode(true);
@@ -36,24 +40,49 @@
     return pictureElement;
   };
 
+  var renderComment = function (element) {
+    var comment = commentElementList.cloneNode(true);
+
+    socialPicture.src = element.avatar;
+    socialPicture.alt = element.name;
+
+    socialText.textContent = element.message;
+
+    return comment;
+  };
+
+
   var renderBigPicture = function (picture) {
+    bigPictureElement.classList.remove('hidden');
+
     bigPictureElement.querySelector('.big-picture__img img').src = picture.url;
     bigPictureElement.querySelector('.likes-count').textContent = picture.likes;
     bigPictureElement.querySelector('.social__caption').alt = picture.description;
+
+    commentElementList.innerHTML = '';
     bigPictureElement.querySelector('.comments-count').textContent = picture.comments.length;
-    var commentElements = bigPictureElement.querySelectorAll('.social__comment');
-    for (var i = 0; i < commentElements.length; i++) {
-      if (picture.comments[i]) {
-        commentElements[i].querySelector('.social__picture').src = picture.comments[i].avatar;
-        commentElements[i].querySelector('.social__picture').alt = picture.comments[i].name;
-        commentElements[i].querySelector('.social__text').textContent = picture.comments[i].message;
-      }
+
+    if (picture.comments.length > COMMENT_NUMBER) {
+      commentsLoader.classList.remove('visually-hidden');
     }
 
-    document.addEventListener('keydown', onEscPressCloseBigPiture);
-    commentsLoader.classList.add('visually-hidden');
-    commentCountElement.classList.add('visually-hidden');
-    bigPictureElement.classList.remove('hidden');
+    picture.comments.slice(0, 5).forEach(function (comment) {
+      fragment.appendChild(renderComment(comment));
+    });
+
+    commentElementList.appendChild(fragment);
+
+    commentsLoader.addEventListener('click', function (evt) {
+      evt.preventDefault();
+      commentsLoader.classList.add('visually-hidden');
+
+
+      picture.comments.slice(5).forEach(function (comment) {
+        fragment.appendChild(renderComment(comment));
+      });
+      commentElementList.appendChild(fragment);
+    });
+    renderComment(picture[0].comments[0]);
   };
 
   var onEscPressCloseBigPiture = function (evt) {
@@ -68,13 +97,9 @@
     document.removeEventListener('keydown', onEscPressCloseBigPiture);
   };
 
-  bigPictureCancel.addEventListener('click', function () {
-    closeBigPicture();
-  });
-
-  var renderPicturesArray = function (pictures) {
-    for (var i = 0; i < pictures.length; i++) {
-      fragment.appendChild(renderPicture(pictures[i]));
+  var renderData = function (data) {
+    for (var i = 0; i < data.length; i++) {
+      fragment.appendChild(renderPicture(data[i]));
     }
 
     Array.from(picturesContainer.querySelectorAll('.picture')).forEach(function (picture) {
@@ -92,7 +117,7 @@
   };
 
   var renderSubset = window.debounce(function (selector, array) {
-    renderPicturesArray(selector(array));
+    renderData(selector(array));
   });
 
   var selectRandomPictures = function (picturesArr) {
@@ -110,35 +135,35 @@
     return array;
   };
 
-  var listenRandomBtnClick = function (photosArr) {
+  var listenRandomBtnClick = function (picturesArr) {
     randomFilter.addEventListener('click', function () {
       setActiveButton(randomFilter);
-      renderSubset(selectRandomPictures, photosArr);
+      renderSubset(selectRandomPictures, picturesArr);
     });
   };
 
-  var selectDiscussedPictures = function (photosArr) {
-    return photosArr.slice()
+  var selectDiscussedPictures = function (picturesArr) {
+    return picturesArr.slice()
       .sort(function (a, b) {
         return b.comments.length - a.comments.length;
       });
   };
 
-  var listenDiscussedBtnClick = function (photosArr) {
+  var listenDiscussedBtnClick = function (picturesArr) {
     discussedFilter.addEventListener('click', function () {
       setActiveButton(discussedFilter);
-      renderSubset(selectDiscussedPictures, photosArr);
+      renderSubset(selectDiscussedPictures, picturesArr);
     });
   };
 
-  var selectPopularPictures = function (photosArr) {
-    return photosArr;
+  var selectPopularPictures = function (picturesArr) {
+    return picturesArr;
   };
 
-  var listenPopularBtnClick = function (photosArr) {
+  var listenPopularBtnClick = function (picturesArr) {
     popularFilter.addEventListener('click', function () {
       setActiveButton(popularFilter);
-      renderSubset(selectPopularPictures, photosArr);
+      renderSubset(selectPopularPictures, picturesArr);
     });
   };
 
@@ -146,7 +171,7 @@
 
     filters.classList.remove('img-filters--inactive');
 
-    renderPicturesArray(pictures);
+    renderData(pictures);
     listenRandomBtnClick(pictures);
     listenDiscussedBtnClick(pictures);
     listenPopularBtnClick(pictures);
