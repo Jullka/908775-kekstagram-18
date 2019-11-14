@@ -157,7 +157,7 @@
   });
 
   imgUploadForm.addEventListener('submit', function (evt) {
-    window.load.send(window.URL.post, closeSuccessLoad, closeErrorLoad, imgUploadForm);
+    window.load.send(URL.post, closeSuccessLoad, closeErrorLoad, imgUploadForm);
     evt.preventDefault();
   });
 
