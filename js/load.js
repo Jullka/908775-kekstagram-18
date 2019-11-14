@@ -6,7 +6,7 @@
     post: 'https://js.dump.academy/kekstagram'
   };
   var successStatus = 200;
-  var xhrTimeout = 1000;
+  var xhrTimeout = 10000;
 
   var generateXhr = function (onSuccess, onError) {
     var xhr = new XMLHttpRequest();

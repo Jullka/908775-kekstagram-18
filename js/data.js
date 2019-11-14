@@ -2,7 +2,7 @@
 
 (function () {
 
-  var similarListElement = document.querySelector('.pictures');
+  var picturesContainer = document.querySelector('.pictures');
   var pictureTemplate = document.querySelector('#picture')
     .content
     .querySelector('.picture');
@@ -16,6 +16,11 @@
   var commentCountElement = bigPictureElement.querySelector('.social__comment-count');
   var commentsLoader = bigPictureElement.querySelector('.comments-loader');
   var bigPictureCancel = bigPictureElement.querySelector('.big-picture__cancel');
+  var filters = document.querySelector('.img-filters');
+  var popularFilter = document.querySelector('#filter-popular');
+  var randomFilter = document.querySelector('#filter-random');
+  var discussedFilter = document.querySelector('#filter-discussed');
+  var FHOTO_NUMBER = 10;
 
   var renderPicture = function (picture) {
     var pictureElement = pictureTemplate.cloneNode(true);
@@ -67,16 +72,90 @@
     closeBigPicture();
   });
 
-  var onSuccess = function (pictures) {
+  var renderPicturesArray = function (pictures) {
     for (var i = 0; i < pictures.length; i++) {
       fragment.appendChild(renderPicture(pictures[i]));
     }
-    similarListElement.appendChild(fragment);
+
+    Array.from(picturesContainer.querySelectorAll('.picture')).forEach(function (picture) {
+      picturesContainer.removeChild(picture);
+    });
+
+    picturesContainer.appendChild(fragment);
+  };
+
+  var setActiveButton = function (button) {
+    randomFilter.classList.remove('img-filters__button--active');
+    discussedFilter.classList.remove('img-filters__button--active');
+    popularFilter.classList.remove('img-filters__button--active');
+    button.classList.add('img-filters__button--active');
+  };
+
+  var renderSubset = window.debounce(function (selector, array) {
+    renderPicturesArray(selector(array));
+  });
+
+  var selectRandomPictures = function (picturesArr) {
+    var array = [];
+    var getRandomPicture = function () {
+      var randomIndex = Math.floor(Math.random() * Math.floor(picturesArr.length));
+      return picturesArr[randomIndex];
+    };
+    while (array.length < FHOTO_NUMBER) {
+      var randomPicture = getRandomPicture(picturesArr);
+      if (!array.includes(randomPicture)) {
+        array.push(randomPicture);
+      }
+    }
+    return array;
+  };
+
+  var listenRandomBtnClick = function (photosArr) {
+    randomFilter.addEventListener('click', function () {
+      setActiveButton(randomFilter);
+      renderSubset(selectRandomPictures, photosArr);
+    });
+  };
+
+  var selectDiscussedPictures = function (photosArr) {
+    return photosArr.slice()
+      .sort(function (a, b) {
+        return b.comments.length - a.comments.length;
+      });
+  };
+
+  var listenDiscussedBtnClick = function (photosArr) {
+    discussedFilter.addEventListener('click', function () {
+      setActiveButton(discussedFilter);
+      renderSubset(selectDiscussedPictures, photosArr);
+    });
+  };
+
+  var selectPopularPictures = function (photosArr) {
+    return photosArr;
+  };
+
+  var listenPopularBtnClick = function (photosArr) {
+    popularFilter.addEventListener('click', function () {
+      setActiveButton(popularFilter);
+      renderSubset(selectPopularPictures, photosArr);
+    });
+  };
+
+  var onSuccess = function (pictures) {
+
+    filters.classList.remove('img-filters--inactive');
+
+    renderPicturesArray(pictures);
+    listenRandomBtnClick(pictures);
+    listenDiscussedBtnClick(pictures);
+    listenPopularBtnClick(pictures);
 
     if (document.querySelector('.error')) {
       document.querySelector('.error').remove();
     }
   };
+
 
   var onError = function (errorText) {
     var errorElement = errorTemplate.cloneNode(true);
@@ -85,7 +164,6 @@
   };
 
   window.load.load(onSuccess, onError);
-
   window.onSuccess = onSuccess;
   window.onError = onError;
 
