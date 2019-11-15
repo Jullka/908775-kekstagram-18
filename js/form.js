@@ -7,10 +7,13 @@
   var uploadClosed = document.querySelector('.img-upload__cancel');
   var successElement = document.querySelector('.success');
   var successButton = document.querySelector('.success__button');
-  var errorElement = document.querySelector('.error');
+  // var errorElement = document.querySelector('.error');
   var errorButton = document.querySelectorAll('.error__button');
   var errorInner = document.querySelector('.error__inner');
   var imgUploadForm = document.querySelector('.img-upload__form');
+  var successTemplate = document.querySelector('#success')
+  .content
+  .querySelector('.success');
 
   // Закрытие нажатием ESC
   var onEscCloseOverlay = function (evt) {
@@ -24,7 +27,7 @@
     window.imageUploadEffectLevel.classList.add('hidden');
     uploadOverlay.classList.remove('hidden');
     document.addEventListener('keydown', onEscCloseOverlay);
-    window.resetFilter();
+    window.resetEffect();
   };
 
   uploadFile.addEventListener('change', openOverlay);
@@ -49,7 +52,7 @@
       return '';
     }
 
-    var hashtags = userInput.toLowerCase().split(' ');
+    var hashtags = userInput.value.toLowerCase().split(' ');
 
     if (hashtags.length > MAX_HASHTAGS) {
       return 'Нельзя указать больше пяти хэш-тегов';
@@ -105,7 +108,7 @@
   });
 
   var closeSuccessLoad = function () {
-    window.render.mainBlock.removeChild(successElement);
+    window.main.removeChild(successElement);
 
     document.removeEventListener('keydown', onEscCloseSuccessLoad);
     successButton.removeEventListener('click', closeSuccessLoad);
@@ -128,7 +131,7 @@
   };
 
   var closeErrorLoad = function () {
-    window.main.removeChild(errorElement);
+    // window.main.removeChild(errorElement);
 
     for (var i = 0; i < errorButton.length; i++) {
       errorButton[i].removeEventListener('click', closeErrorLoad);
@@ -150,14 +153,20 @@
     }
   };
 
-  uploadOverlay.addEventListener('submit', function (evt) {
-    evt.preventDefault();
-    window.load.saveData(new FormData(uploadOverlay), window.onSuccess, window.onError);
-    window.load.send();
-  });
+  var onSuccess = function () {
+    var successItem = successTemplate.cloneNode(true);
+    window.main.appendChild(successItem);
+  };
+
+  // uploadOverlay.addEventListener('submit', function (evt) {
+  //   evt.preventDefault();
+  //   window.load.saveData(new FormData(uploadOverlay), window.onSuccess, window.onError);
+  //   window.load.send();
+  // });
 
   imgUploadForm.addEventListener('submit', function (evt) {
-    window.load.send(URL.post, closeSuccessLoad, closeErrorLoad, imgUploadForm);
+    // window.load.send(URL.post, closeSuccessLoad, closeErrorLoad, imgUploadForm);
+    window.load.send(new FormData(imgUploadForm), onSuccess, window.onError);
     evt.preventDefault();
   });
 
