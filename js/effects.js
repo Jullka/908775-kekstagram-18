@@ -1,5 +1,14 @@
 'use strict';
 (function () {
+
+  var PIN_MAX_POSITION = 453;
+  var PIN_MIN_POSITION = 0;
+  var effectsList = document.querySelector('.effects');
+  var effectLevelPin = document.querySelector('.effect-level__pin');
+  var effectLevelDepth = document.querySelector('.effect-level__depth');
+  var imageUploadEffectLevel = document.querySelector('.img-upload__effect-level');
+  var startX = PIN_MIN_POSITION;
+
   var effects = {
     none: {
       class: 'effects__preview--none',
@@ -41,14 +50,7 @@
     }
   };
 
-  var PIN_MAX_POSITION = 453;
-  var PIN_MIN_POSITION = 0;
-  var startX = PIN_MIN_POSITION;
   var selectedEffect = effects.none;
-  var effectsList = document.querySelector('.effects');
-  var effectLevelPin = document.querySelector('.effect-level__pin');
-  var effectLevelDepth = document.querySelector('.effect-level__depth');
-  var imageUploadEffectLevel = document.querySelector('.img-upload__effect-level');
 
   window.resetEffect = function () {
     effectLevelPin.style.left = PIN_MAX_POSITION + 'px';

@@ -2,27 +2,23 @@
 
 (function () {
 
+  var MAX_HASHTAGS = 5;
+  var MAX_HASHTAG_LENGTH = 20;
+  var textHashtags = document.querySelector('.text__hashtags');
   var uploadFile = document.querySelector('.img-upload__input');
   var uploadOverlay = document.querySelector('.img-upload__overlay');
   var uploadClosed = document.querySelector('.img-upload__cancel');
-  var successElement = document.querySelector('.success');
-  var successButton = document.querySelector('.success__button');
-  // var errorElement = document.querySelector('.error');
-  var errorButton = document.querySelectorAll('.error__button');
   var errorInner = document.querySelector('.error__inner');
   var imgUploadForm = document.querySelector('.img-upload__form');
+  var successButton = document.querySelector('.success__button');
+  var errorButton = document.querySelectorAll('.error__button');
   var successTemplate = document.querySelector('#success')
   .content
   .querySelector('.success');
+  var errorTemplate = document.querySelector('#error')
+    .content
+    .querySelector('.error');
 
-  // Закрытие нажатием ESC
-  var onEscCloseOverlay = function (evt) {
-    if (evt.keyCode === window.KEYCODE.ESC) {
-      closeOverlay();
-    }
-  };
-
-  // Открытие формы для редактирования фото
   var openOverlay = function () {
     window.imageUploadEffectLevel.classList.add('hidden');
     uploadOverlay.classList.remove('hidden');
@@ -32,7 +28,6 @@
 
   uploadFile.addEventListener('change', openOverlay);
 
-  // Закрытие формы для редактирования фото
   var closeOverlay = function () {
     uploadOverlay.classList.add('hidden');
     document.removeEventListener('keydown', onEscCloseOverlay);
@@ -43,9 +38,11 @@
     closeOverlay();
   });
 
-  var MAX_HASHTAGS = 5;
-  var MAX_HASHTAG_LENGTH = 20;
-  var textHashtags = document.querySelector('.text__hashtags');
+  var onEscCloseOverlay = function (evt) {
+    if (evt.keyCode === window.KEYCODE.ESC) {
+      closeOverlay();
+    }
+  };
 
   var checkHashtags = function (userInput) {
     if (userInput === '') {
@@ -101,14 +98,13 @@
     checkHashtags(textHashtags);
   });
 
-  // Комментарии
   var textDescription = document.querySelector('.text__description');
   textDescription.addEventListener('focus', function () {
     document.removeEventListener('keydown', onEscCloseOverlay);
   });
 
   var closeSuccessLoad = function () {
-    window.main.removeChild(successElement);
+    window.main.removeChild(successTemplate);
 
     document.removeEventListener('keydown', onEscCloseSuccessLoad);
     successButton.removeEventListener('click', closeSuccessLoad);
@@ -131,7 +127,6 @@
   };
 
   var closeErrorLoad = function () {
-    // window.main.removeChild(errorElement);
 
     for (var i = 0; i < errorButton.length; i++) {
       errorButton[i].removeEventListener('click', closeErrorLoad);
@@ -158,16 +153,23 @@
     window.main.appendChild(successItem);
   };
 
-  // uploadOverlay.addEventListener('submit', function (evt) {
-  //   evt.preventDefault();
-  //   window.load.saveData(new FormData(uploadOverlay), window.onSuccess, window.onError);
-  //   window.load.send();
-  // });
+  var onError = function (errorText) {
+    var errorItem = errorTemplate.cloneNode(true);
+    errorItem.querySelector('.error__title').textContent = errorText;
+    window.main.appendChild(errorItem);
+
+    errorButton.forEach(function (item) {
+      item.addEventListener('click', closeErrorLoad);
+    });
+
+    document.addEventListener('keydown', onEscCloseErrorLoad, true);
+    document.addEventListener('click', onClickCloseErrorLoad);
+  };
 
   imgUploadForm.addEventListener('submit', function (evt) {
-    // window.load.send(URL.post, closeSuccessLoad, closeErrorLoad, imgUploadForm);
-    window.load.send(new FormData(imgUploadForm), onSuccess, window.onError);
+    window.load.send(new FormData(imgUploadForm), onSuccess, onError);
     evt.preventDefault();
   });
 
+  window.onError = onError;
 })();

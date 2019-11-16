@@ -1,16 +1,12 @@
 'use strict';
 (function () {
-  var errorTemplate = document.querySelector('#error')
-    .content
-    .querySelector('.error');
 
+  var FHOTO_NUMBER = 10;
   var main = document.querySelector('main');
   var filters = document.querySelector('.img-filters');
   var popularFilter = document.querySelector('#filter-popular');
   var randomFilter = document.querySelector('#filter-random');
   var discussedFilter = document.querySelector('#filter-discussed');
-  var FHOTO_NUMBER = 10;
-
 
   var setActiveButton = function (button) {
     randomFilter.classList.remove('img-filters__button--active');
@@ -84,15 +80,8 @@
     }
   };
 
-  var onError = function (errorText) {
-    var errorElement = errorTemplate.cloneNode(true);
-    errorElement.querySelector('.error__title').textContent = errorText;
-    main.appendChild(errorElement);
-  };
-
-  window.load.load(onSuccess, onError);
+  window.load.load(onSuccess, window.onError);
   window.onSuccess = onSuccess;
-  window.onError = onError;
   window.main = main;
 
 })();
