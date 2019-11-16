@@ -15,8 +15,8 @@
     button.classList.add('img-filters__button--active');
   };
 
-  var renderSubset = window.debounce(function (selector, array) {
-    window.renderData(selector(array));
+  var renderSubset = window.throttling.debounce(function (selector, array) {
+    window.preview.renderData(selector(array));
   });
 
   var selectRandomPictures = function (picturesArr) {
@@ -70,7 +70,7 @@
 
     filters.classList.remove('img-filters--inactive');
 
-    window.renderData(pictures);
+    window.preview.renderData(pictures);
     listenRandomBtnClick(pictures);
     listenDiscussedBtnClick(pictures);
     listenPopularBtnClick(pictures);
@@ -80,7 +80,7 @@
     }
   };
 
-  window.load.load(onSuccess, window.onError);
+  window.backend.load(onSuccess, window.onError);
 
   window.filters = {
     main: main

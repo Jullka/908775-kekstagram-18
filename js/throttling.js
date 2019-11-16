@@ -3,7 +3,7 @@
 
   var DEBOUNCE_INTERVAL = 500;
 
-  window.debounce = function (cb) {
+  var debounce = function (cb) {
     var lastTimeout = null;
 
     return function () {
@@ -15,6 +15,10 @@
         cb.apply(null, parameters);
       }, DEBOUNCE_INTERVAL);
     };
+  };
+
+  window.throttling = {
+    debounce: debounce
   };
 
 })();
