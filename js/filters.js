@@ -81,6 +81,9 @@
   };
 
   window.load.load(onSuccess, window.onError);
-  window.main = main;
+
+  window.filters = {
+    main: main
+  };
 
 })();

@@ -55,14 +55,14 @@
   window.resetEffect = function () {
     effectLevelPin.style.left = PIN_MAX_POSITION + 'px';
     effectLevelDepth.style.width = PIN_MAX_POSITION + 'px';
-    window.imgUploadPreview.style.filter = '';
+    window.gallery.imgUploadPreview.style.filter = '';
   };
 
   var effectFill = function (effect, value) {
-    var previewPicture = window.imgUploadPreview.querySelector('img');
+    var previewPicture = window.gallery.imgUploadPreview.querySelector('img');
     var satiety = (effect.max - effect.min) * value + effect.min;
     previewPicture.style.filter = effect.effectName + '(' + satiety + effect.points + ')';
-    window.imgUploadPreview.classList = 'img-upload__preview';
+    window.gallery.imgUploadPreview.classList = 'img-upload__preview';
     previewPicture.classList.add(effect.class);
   };
 
@@ -114,6 +114,8 @@
 
   });
 
-  window.imageUploadEffectLevel = imageUploadEffectLevel;
+  window.effects = {
+    imageUploadEffectLevel: imageUploadEffectLevel
+  };
 
 })();

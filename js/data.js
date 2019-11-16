@@ -4,9 +4,6 @@
 
   var COMMENT_NUMBER = 5;
   var picturesContainer = document.querySelector('.pictures');
-  var pictureTemplate = document.querySelector('#picture')
-    .content
-    .querySelector('.picture');
   var bigPictureElement = document.querySelector('.big-picture');
   var bigPictureCancelBtn = bigPictureElement.querySelector('.big-picture__cancel');
   var commentElementList = document.querySelector('.social__comments');
@@ -15,6 +12,9 @@
   var commentCount = bigPictureElement.querySelector('.social__comment-count');
   var body = document.querySelector('body');
   var fragment = document.createDocumentFragment();
+  var pictureTemplate = document.querySelector('#picture')
+      .content
+      .querySelector('.picture');
 
   var renderPicture = function (picture) {
     var pictureElement = pictureTemplate.cloneNode(true);
@@ -85,16 +85,15 @@
     document.addEventListener('keydown', onEscBigPitureClose);
   };
 
-
   var onClickCommentButton = function () {
     window.currentComments.show();
   };
 
   var closeBigPicture = function () {
     bigPictureElement.classList.add('hidden');
-    body.classList.remove('modal-open');
     commentCount.classList.remove('visually-hidden');
     commentsButton.classList.remove('visually-hidden');
+    body.classList.remove('modal-open');
 
     document.removeEventListener('keydown', onEscBigPitureClose);
     commentsButton.removeEventListener('click', onClickCommentButton);

@@ -1,20 +1,21 @@
 'use strict';
 
 (function () {
+
   var URL = {
-    get: 'https://js.dump.academy/kekstagram/data',
-    post: 'https://js.dump.academy/kekstagram'
+    GET: 'https://js.dump.academy/kekstagram/data',
+    POST: 'https://js.dump.academy/kekstagram'
   };
-  var successStatus = 200;
-  var xhrTimeout = 10000;
+  var SUCCESSSTATUS = 200;
+  var XHRTIMEOUT = 10000;
 
   var generateXhr = function (onSuccess, onError) {
     var xhr = new XMLHttpRequest();
-
     xhr.responseType = 'json';
-    xhr.timeout = xhrTimeout;
+    xhr.timeout = XHRTIMEOUT;
+
     xhr.addEventListener('load', function () {
-      if (xhr.status === successStatus) {
+      if (xhr.status === SUCCESSSTATUS) {
         onSuccess(xhr.response);
       } else {
         onError('Статус ответа: ' + xhr.status + ' ' + xhr.statusText);
@@ -36,14 +37,14 @@
   var load = function (onSuccess, onError) {
     var xhr = generateXhr(onSuccess, onError);
 
-    xhr.open('GET', URL.get);
+    xhr.open('GET', URL.GET);
     xhr.send();
   };
 
   var send = function (data, onSuccess, onError) {
     var xhr = generateXhr(onSuccess, onError);
 
-    xhr.open('POST', URL.post);
+    xhr.open('POST', URL.POST);
     xhr.send(data);
   };
 
@@ -52,5 +53,4 @@
     send: send,
   };
 
-  window.URL.post = URL.post;
 })();

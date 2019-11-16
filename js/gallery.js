@@ -1,6 +1,7 @@
 'use strict';
 
 (function () {
+
   var scaleControlSmaller = document.querySelector('.scale__control--smaller');
   var scaleControlBigger = document.querySelector('.scale__control--bigger');
   var scaleControlValue = document.querySelector('.scale__control--value');
@@ -29,6 +30,8 @@
     }
   });
 
-  window.imgUploadPreview = imgUploadPreview;
+  window.gallery = {
+    imgUploadPreview: imgUploadPreview
+  };
 
 })();
