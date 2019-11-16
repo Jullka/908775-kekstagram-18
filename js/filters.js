@@ -81,7 +81,6 @@
   };
 
   window.load.load(onSuccess, window.onError);
-  window.onSuccess = onSuccess;
   window.main = main;
 
 })();

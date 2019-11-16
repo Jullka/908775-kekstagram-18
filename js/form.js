@@ -9,7 +9,6 @@
   var uploadOverlay = document.querySelector('.img-upload__overlay');
   var uploadClosed = document.querySelector('.img-upload__cancel');
   var errorInner = document.querySelector('.error__inner');
-  var successInner = document.querySelector('.success__inner');
   var imgUploadForm = document.querySelector('.img-upload__form');
   var successButton = document.querySelector('.success__button');
   var errorButtons = document.querySelectorAll('.error__buttons');
@@ -49,7 +48,7 @@
     if (userInput === '') {
       return '';
     }
-
+    textHashtags.style.borderColor = 'red';
     var hashtags = textHashtags.value.toLowerCase().split(' ');
 
     if (hashtags.length > MAX_HASHTAGS) {
@@ -104,24 +103,25 @@
     document.removeEventListener('keydown', onEscCloseOverlay);
   });
 
+  var successItem = successTemplate.cloneNode(true);
   var onSuccess = function () {
     closeOverlay();
-    var successItem = successTemplate.cloneNode(true);
     window.main.appendChild(successItem);
 
+
+    // successButton.addEventListener('click', closeSuccessLoad);
     document.addEventListener('keydown', onEscCloseSuccessLoad);
-    successButton.addEventListener('click', closeSuccessLoad);
     document.addEventListener('click', onClickCloseSuccessLoad);
   };
 
   var closeSuccessLoad = function () {
-    window.main.removeChild(successTemplate);
+    successItem.remove();
 
     document.removeEventListener('keydown', onEscCloseSuccessLoad);
-    successButton.removeEventListener('click', closeSuccessLoad);
+    // successButton.removeEventListener('click', closeSuccessLoad);
     document.removeEventListener('click', onClickCloseSuccessLoad);
 
-    uploadOverlay.reset();
+    imgUploadForm.reset();
   };
 
   var onEscCloseSuccessLoad = function (evt) {
@@ -131,6 +131,7 @@
   };
 
   var onClickCloseSuccessLoad = function (evt) {
+    var successInner = window.main.querySelector('.success__inner');
     if (evt.target !== successInner && !(successInner.contains(evt.target))) {
       closeSuccessLoad();
     }
