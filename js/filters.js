@@ -1,7 +1,8 @@
 'use strict';
 (function () {
 
-  var FHOTO_NUMBER = 10;
+  var PHOTO_NUMBER = 10;
+
   var main = document.querySelector('main');
   var filters = document.querySelector('.img-filters');
   var popularFilter = document.querySelector('#filter-popular');
@@ -20,18 +21,18 @@
   });
 
   var selectRandomPictures = function (picturesArr) {
-    var array = [];
+    var randomPicturesArr = [];
     var getRandomPicture = function () {
       var randomIndex = Math.floor(Math.random() * Math.floor(picturesArr.length));
       return picturesArr[randomIndex];
     };
-    while (array.length < FHOTO_NUMBER) {
+    while (randomPicturesArr.length < PHOTO_NUMBER) {
       var randomPicture = getRandomPicture(picturesArr);
-      if (!array.includes(randomPicture)) {
-        array.push(randomPicture);
+      if (!randomPicturesArr.includes(randomPicture)) {
+        randomPicturesArr.push(randomPicture);
       }
     }
-    return array;
+    return randomPicturesArr;
   };
 
   var listenRandomBtnClick = function (picturesArr) {

@@ -3,6 +3,7 @@
 (function () {
 
   var COMMENT_NUMBER = 5;
+
   var picturesContainer = document.querySelector('.pictures');
   var bigPictureElement = document.querySelector('.big-picture');
   var bigPictureCancelBtn = bigPictureElement.querySelector('.big-picture__cancel');
@@ -15,6 +16,7 @@
   var pictureTemplate = document.querySelector('#picture')
       .content
       .querySelector('.picture');
+  var currentComments;
 
   var renderPicture = function (picture) {
     var pictureElement = pictureTemplate.cloneNode(true);
@@ -30,13 +32,15 @@
     return pictureElement;
   };
 
+  var printCommentCount = function (element, count, total) {
+    element.textContent = count + ' ' + 'из' + ' ' + total + ' ' + 'коментариев';
+  };
+
   var showComments = function (comments) {
     var count = 0;
     var setCommentCounter = function () {
       if (count <= comments.length) {
-        var str = commentCount.innerHTML;
-        str = count + str.slice(str.indexOf(' '));
-        commentCount.innerHTML = str;
+        printCommentCount(commentCount, count, comments.length);
       } else {
         commentCount.classList.add('visually-hidden');
         commentsButton.classList.add('visually-hidden');
@@ -69,10 +73,19 @@
     };
   };
 
+  var onCommentButtonClick = function () {
+    currentComments.show();
+  };
+
   var renderBigPicture = function (picture) {
     bigPictureElement.classList.remove('hidden');
     body.classList.add('modal-open');
-    var currentComments = showComments(picture.comments);
+    currentComments = showComments(picture.comments);
+
+    var children = Array.from(commentElementList.children);
+    children.forEach(function (item) {
+      commentElementList.removeChild(item);
+    });
 
     bigPictureElement.querySelector('.big-picture__img img').src = picture.url;
     bigPictureElement.querySelector('.likes-count').textContent = picture.likes;
@@ -81,18 +94,17 @@
 
     currentComments.show();
     bigPictureCancelBtn.addEventListener('click', closeBigPicture);
-    commentsButton.addEventListener('click', currentComments.show);
+    commentsButton.addEventListener('click', onCommentButtonClick);
     document.addEventListener('keydown', onEscBigPitureClose);
-
   };
 
   var closeBigPicture = function () {
     bigPictureElement.classList.add('hidden');
     commentCount.classList.remove('visually-hidden');
     commentsButton.classList.remove('visually-hidden');
-    body.classList.remove('modal-open');
-
+    commentsButton.removeEventListener('click', onCommentButtonClick);
     document.removeEventListener('keydown', onEscBigPitureClose);
+    body.classList.remove('modal-open');
   };
 
   var onEscBigPitureClose = function (evt) {

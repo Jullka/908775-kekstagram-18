@@ -3,11 +3,13 @@
 
   var PIN_MAX_POSITION = 453;
   var PIN_MIN_POSITION = 0;
+
   var effectsList = document.querySelector('.effects');
   var effectLevelPin = document.querySelector('.effect-level__pin');
   var effectLevelDepth = document.querySelector('.effect-level__depth');
   var imageUploadEffectLevel = document.querySelector('.img-upload__effect-level');
   var previewPicture = window.gallery.imgUploadPreview.querySelector('img');
+
   var startX = PIN_MIN_POSITION;
   var lastEffectClassName = '';
 
@@ -60,17 +62,18 @@
     window.gallery.imgUploadPreview.style.filter = '';
   };
 
-  var clearEffect = function () {
-    previewPicture.removeAttribute('style');
-    previewPicture.classList.remove(lastEffectClassName);
-  };
-
   var effectFill = function (effect, value) {
     var satiety = (effect.max - effect.min) * value + effect.min;
     previewPicture.style.filter = effect.effectName + '(' + satiety + effect.points + ')';
     window.gallery.imgUploadPreview.classList = 'img-upload__preview';
     lastEffectClassName = effect.class;
     previewPicture.classList.add(effect.class);
+  };
+
+
+  var clearEffect = function () {
+    previewPicture.removeAttribute('style');
+    previewPicture.classList.remove(lastEffectClassName);
   };
 
   var getSliderValue = function (currentValue, maxValue) {
@@ -114,7 +117,6 @@
     var currentEffect = effects[evt.target.value];
     selectedEffect = currentEffect;
 
-
     if (evt.target.value === 'none') {
       clearEffect();
       imageUploadEffectLevel.classList.add('hidden');
@@ -129,7 +131,8 @@
 
   window.effects = {
     imageUploadEffectLevel: imageUploadEffectLevel,
-    resetEffect: resetEffect
+    resetEffect: resetEffect,
+    clearEffect: clearEffect
   };
 
 })();

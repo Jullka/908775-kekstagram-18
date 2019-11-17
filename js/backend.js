@@ -2,20 +2,20 @@
 
 (function () {
 
+  var SUCCESS_STATUS = 200;
+  var XHR_TIMEOUT = 10000;
   var URL = {
-    GET: 'https://js.dump.academy/kekstagram/data',
-    POST: 'https://js.dump.academy/kekstagram'
+    LOAD_DATA: 'https://js.dump.academy/kekstagram/data',
+    SAVE_DATA: 'https://js.dump.academy/kekstagram'
   };
-  var SUCCESSSTATUS = 200;
-  var XHRTIMEOUT = 10000;
 
   var generateXhr = function (onSuccess, onError) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
-    xhr.timeout = XHRTIMEOUT;
+    xhr.timeout = XHR_TIMEOUT;
 
     xhr.addEventListener('load', function () {
-      if (xhr.status === SUCCESSSTATUS) {
+      if (xhr.status === SUCCESS_STATUS) {
         onSuccess(xhr.response);
       } else {
         onError('Статус ответа: ' + xhr.status + ' ' + xhr.statusText);
@@ -27,7 +27,7 @@
     });
 
     xhr.addEventListener('timeout', function () {
-      if (xhr.statusText !== 200) {
+      if (xhr.statusText !== SUCCESS_STATUS) {
         onError('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
       }
     });
@@ -37,14 +37,14 @@
   var load = function (onSuccess, onError) {
     var xhr = generateXhr(onSuccess, onError);
 
-    xhr.open('GET', URL.GET);
+    xhr.open('GET', URL.LOAD_DATA);
     xhr.send();
   };
 
   var send = function (data, onSuccess, onError) {
     var xhr = generateXhr(onSuccess, onError);
 
-    xhr.open('POST', URL.POST);
+    xhr.open('POST', URL.SAVE_DATA);
     xhr.send(data);
   };
 

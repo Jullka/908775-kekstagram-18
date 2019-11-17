@@ -4,6 +4,16 @@
 
   var MAX_HASHTAGS = 5;
   var MAX_HASHTAG_LENGTH = 20;
+
+  var HashtagErrors = {
+    MAX_QUANTITY: 'Нельзя указывать более 5-ти хэш-тегов',
+    FIRST_SYMBOL: 'Xэш-тег должен начинаться с символа #',
+    LENGTH: 'Хэш-тег не может состоять только из одной решётки',
+    SPACE: 'Хэштеги разделяются пробелами',
+    UNIQUENESS: 'Один и тот же хэш-тег не может быть использован дважды',
+    MAX_LENGTH: 'Максимальная длина одного хэш-тега 20 символов, включая решётку'
+  };
+
   var textHashtags = document.querySelector('.text__hashtags');
   var textDescription = document.querySelector('.text__description');
   var uploadFile = document.querySelector('.img-upload__input');
@@ -22,6 +32,7 @@
     uploadOverlay.classList.remove('hidden');
     document.addEventListener('keydown', onEscCloseOverlay);
     window.effects.resetEffect();
+    window.effects.clearEffect();
   };
 
   uploadFile.addEventListener('change', openOverlay);
@@ -51,32 +62,32 @@
     var hashtags = textHashtags.value.toLowerCase().split(' ');
 
     if (hashtags.length > MAX_HASHTAGS) {
-      return 'Нельзя указать больше пяти хэш-тегов';
+      return HashtagErrors.MAX_QUANTITY;
     }
 
     for (var i = 0; i < hashtags.length; i++) {
       var hashtag = hashtags[i];
 
       if (hashtag[0] !== '#') {
-        return 'Хэштег должен начинаться с символа #';
+        return HashtagErrors.FIRST_SYMBOL;
       }
 
       if (hashtag === '#') {
-        return 'Хештег не может состоять только из одной #';
+        return HashtagErrors.LENGTH;
       }
 
       var cutHashtag = hashtag.slice(1);
 
       if (cutHashtag.indexOf('#') !== -1) {
-        return 'Хэштеги разделяются пробелами';
+        return HashtagErrors.SPACE;
       }
 
       if (hashtags.indexOf(hashtag) !== i) {
-        return 'Oдин и тот же хэштег не может быть использован дважды';
+        return HashtagErrors.UNIQUENESS;
       }
 
       if (hashtag.length > MAX_HASHTAG_LENGTH) {
-        return 'Максимальная длина одного хэштега 20 символов';
+        return HashtagErrors.MAX_LENGTH;
       }
     }
 

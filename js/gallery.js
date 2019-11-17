@@ -2,17 +2,18 @@
 
 (function () {
 
-  var scaleControlSmaller = document.querySelector('.scale__control--smaller');
-  var scaleControlBigger = document.querySelector('.scale__control--bigger');
-  var scaleControlValue = document.querySelector('.scale__control--value');
-  var scaleControlNumber = parseInt(scaleControlValue.value, 10);
-  var imgUploadPreview = document.querySelector('.img-upload__preview');
-
   var ScaleValue = {
     MIN: 25,
     MAX: 100,
     STEP: 25
   };
+
+  var scaleControlSmaller = document.querySelector('.scale__control--smaller');
+  var scaleControlBigger = document.querySelector('.scale__control--bigger');
+  var scaleControlValue = document.querySelector('.scale__control--value');
+  var imgUploadPreview = document.querySelector('.img-upload__preview');
+
+  var scaleControlNumber = parseInt(scaleControlValue.value, 10);
 
   scaleControlBigger.addEventListener('click', function () {
     if (scaleControlNumber < ScaleValue.MAX) {
