@@ -5,7 +5,7 @@
   var MAX_HASHTAGS = 5;
   var MAX_HASHTAG_LENGTH = 20;
 
-  var HashtagErrors = {
+  var HashtagError = {
     MAX_QUANTITY: 'Нельзя указывать более 5-ти хэш-тегов',
     FIRST_SYMBOL: 'Xэш-тег должен начинаться с символа #',
     LENGTH: 'Хэш-тег не может состоять только из одной решётки',
@@ -62,32 +62,32 @@
     var hashtags = textHashtags.value.toLowerCase().split(' ');
 
     if (hashtags.length > MAX_HASHTAGS) {
-      return HashtagErrors.MAX_QUANTITY;
+      return HashtagError.MAX_QUANTITY;
     }
 
     for (var i = 0; i < hashtags.length; i++) {
       var hashtag = hashtags[i];
 
       if (hashtag[0] !== '#') {
-        return HashtagErrors.FIRST_SYMBOL;
+        return HashtagError.FIRST_SYMBOL;
       }
 
       if (hashtag === '#') {
-        return HashtagErrors.LENGTH;
+        return HashtagError.LENGTH;
       }
 
       var cutHashtag = hashtag.slice(1);
 
       if (cutHashtag.indexOf('#') !== -1) {
-        return HashtagErrors.SPACE;
+        return HashtagError.SPACE;
       }
 
       if (hashtags.indexOf(hashtag) !== i) {
-        return HashtagErrors.UNIQUENESS;
+        return HashtagError.UNIQUENESS;
       }
 
       if (hashtag.length > MAX_HASHTAG_LENGTH) {
-        return HashtagErrors.MAX_LENGTH;
+        return HashtagError.MAX_LENGTH;
       }
     }
 
