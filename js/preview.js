@@ -39,7 +39,7 @@
   var showComments = function (comments) {
     var count = 0;
     var setCommentCounter = function () {
-      if (count <= comments.length) {
+      if (count < comments.length) {
         printCommentCount(commentCount, count, comments.length);
       } else {
         commentCount.classList.add('visually-hidden');
@@ -90,7 +90,6 @@
     bigPictureElement.querySelector('.big-picture__img img').src = picture.url;
     bigPictureElement.querySelector('.likes-count').textContent = picture.likes;
     bigPictureElement.querySelector('.social__caption').alt = picture.description;
-    bigPictureElement.querySelector('.comments-count').textContent = picture.comments.length;
 
     currentComments.show();
     bigPictureCancelBtn.addEventListener('click', closeBigPicture);

@@ -62,18 +62,19 @@
     window.gallery.imgUploadPreview.style.filter = '';
   };
 
+  var clearEffect = function () {
+    previewPicture.removeAttribute('style');
+    if (lastEffectClassName !== '') {
+      previewPicture.classList.remove(lastEffectClassName);
+    }
+  };
+
   var effectFill = function (effect, value) {
     var satiety = (effect.max - effect.min) * value + effect.min;
     previewPicture.style.filter = effect.effectName + '(' + satiety + effect.points + ')';
     window.gallery.imgUploadPreview.classList = 'img-upload__preview';
     lastEffectClassName = effect.class;
     previewPicture.classList.add(effect.class);
-  };
-
-
-  var clearEffect = function () {
-    previewPicture.removeAttribute('style');
-    previewPicture.classList.remove(lastEffectClassName);
   };
 
   var getSliderValue = function (currentValue, maxValue) {

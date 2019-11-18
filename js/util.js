@@ -1,6 +1,7 @@
 'use strict';
 
 (function () {
+
   var KEYCODE = {
     ESC: 27,
     ENTER: 13

@@ -20,50 +20,50 @@
     window.preview.renderData(selector(array));
   });
 
-  var selectRandomPictures = function (picturesArr) {
-    var randomPicturesArr = [];
+  var selectRandomPictures = function (pictures) {
+    var randomPictures = [];
     var getRandomPicture = function () {
-      var randomIndex = Math.floor(Math.random() * Math.floor(picturesArr.length));
-      return picturesArr[randomIndex];
+      var randomIndex = Math.floor(Math.random() * Math.floor(pictures.length));
+      return pictures[randomIndex];
     };
-    while (randomPicturesArr.length < PHOTO_NUMBER) {
-      var randomPicture = getRandomPicture(picturesArr);
-      if (!randomPicturesArr.includes(randomPicture)) {
-        randomPicturesArr.push(randomPicture);
+    while (randomPictures.length < PHOTO_NUMBER) {
+      var randomPicture = getRandomPicture(pictures);
+      if (!randomPictures.includes(randomPicture)) {
+        randomPictures.push(randomPicture);
       }
     }
-    return randomPicturesArr;
+    return randomPictures;
   };
 
-  var listenRandomBtnClick = function (picturesArr) {
+  var listenRandomBtnClick = function (pictures) {
     randomFilter.addEventListener('click', function () {
       setActiveButton(randomFilter);
-      renderSubset(selectRandomPictures, picturesArr);
+      renderSubset(selectRandomPictures, pictures);
     });
   };
 
-  var selectDiscussedPictures = function (picturesArr) {
-    return picturesArr.slice()
+  var selectDiscussedPictures = function (pictures) {
+    return pictures.slice()
       .sort(function (a, b) {
         return b.comments.length - a.comments.length;
       });
   };
 
-  var listenDiscussedBtnClick = function (picturesArr) {
+  var listenDiscussedBtnClick = function (pictures) {
     discussedFilter.addEventListener('click', function () {
       setActiveButton(discussedFilter);
-      renderSubset(selectDiscussedPictures, picturesArr);
+      renderSubset(selectDiscussedPictures, pictures);
     });
   };
 
-  var selectPopularPictures = function (picturesArr) {
-    return picturesArr;
+  var selectPopularPictures = function (pictures) {
+    return pictures;
   };
 
-  var listenPopularBtnClick = function (picturesArr) {
+  var listenPopularBtnClick = function (pictures) {
     popularFilter.addEventListener('click', function () {
       setActiveButton(popularFilter);
-      renderSubset(selectPopularPictures, picturesArr);
+      renderSubset(selectPopularPictures, pictures);
     });
   };
 
