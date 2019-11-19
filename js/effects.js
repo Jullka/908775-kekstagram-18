@@ -116,6 +116,7 @@
 
   effectsList.addEventListener('change', function (evt) {
     var currentEffect = effects[evt.target.value];
+    clearEffect();
     selectedEffect = currentEffect;
 
     if (evt.target.value === 'none') {

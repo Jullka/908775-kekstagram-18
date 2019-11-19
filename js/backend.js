@@ -28,7 +28,7 @@
     });
 
     xhr.addEventListener('timeout', function () {
-      if (xhr.statusText !== SUCCESS_STATUS) {
+      if (xhr.status !== SUCCESS_STATUS) {
         onError('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
       }
     });
